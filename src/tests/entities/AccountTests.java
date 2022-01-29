@@ -4,15 +4,28 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import entities.Account;
+import tests.factory.AccountFactory;
 
 public class AccountTests {
 
 	@Test
-	public void depositShouldIncreaseBalanceWhenPositiveAmount() {
+	public void depositShouldIncreaseBalanceAndDiscountFeeWhenPositiveAmount() {
 		
 		double amount = 200.0;
 		double expectedValue = 196.0;
-		Account acc = new Account(1L, 0.0);
+		Account acc = AccountFactory.createEmptyAccount();
+		
+		acc.deposit(amount);
+		
+		Assertions.assertEquals(expectedValue, acc.getBalance());
+	}
+	
+	@Test
+	public void depositShouldDoNothingWhenNegativeAmount() {
+		
+		double expectedValue = 100.0;
+		Account acc = AccountFactory.createAccount(expectedValue);
+		double amount = -200.0;
 		
 		acc.deposit(amount);
 		
@@ -25,7 +38,7 @@ public class AccountTests {
 		double amount = 100.0;
 		double accountBalance = 250.0;
 		double expectedValue = 150.0;
-		Account acc = new Account(1L, accountBalance);
+		Account acc = AccountFactory.createAccount(accountBalance);
 		
 		acc.withdraw(amount);
 		
@@ -35,7 +48,7 @@ public class AccountTests {
 	@Test
 	public void fullwithdrawShouldZeroBalanceWhenCalled() {
 		
-		Account acc = new Account(1L, 5000.0);
+		Account acc = AccountFactory.createAccount(5000.0);
 		
 		acc.fullwithdraw();
 		
@@ -46,7 +59,7 @@ public class AccountTests {
 	public void fullwithdrawShouldReturnTheValueWhenCalled() {
 		
 		double accountBalance = 5000.0;
-		Account acc = new Account(1L, accountBalance);
+		Account acc = AccountFactory.createAccount(accountBalance);
 		
 		double returnedValue = acc.fullwithdraw();
 		
