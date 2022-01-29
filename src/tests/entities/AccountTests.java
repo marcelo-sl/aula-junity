@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import entities.Account;
-import tests.factory.AccountFactory;
+import tests.factories.AccountFactory;
 
 public class AccountTests {
 
@@ -46,23 +46,22 @@ public class AccountTests {
 	}
 	
 	@Test
-	public void fullwithdrawShouldZeroBalanceWhenCalled() {
-		
-		Account acc = AccountFactory.createAccount(5000.0);
-		
-		acc.fullwithdraw();
-		
-		Assertions.assertEquals(0.0, acc.getBalance());
+	public void withdrawShouldThrowExceptionWhenInsufficientBalance() {
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			Account acc = AccountFactory.createAccount(800.0);
+			acc.withdraw(801.0);
+		});
 	}
 	
 	@Test
-	public void fullwithdrawShouldReturnTheValueWhenCalled() {
+	public void fullwithdrawShouldZeroBalanceAndReturnValue() {
 		
-		double accountBalance = 5000.0;
-		Account acc = AccountFactory.createAccount(accountBalance);
+		double initialBalance = 5000.0;
+		Account acc = AccountFactory.createAccount(initialBalance);
 		
-		double returnedValue = acc.fullwithdraw();
+		double result = acc.fullwithdraw();
 		
-		Assertions.assertEquals(returnedValue, accountBalance);
+		Assertions.assertEquals(0.0, acc.getBalance());
+		Assertions.assertEquals(result, initialBalance);
 	}
 }

@@ -1,4 +1,4 @@
-package tests.factory;
+package tests.factories;
 
 import entities.Account;
 
